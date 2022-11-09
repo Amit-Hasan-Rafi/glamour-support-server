@@ -16,6 +16,9 @@ async function run() {
     try {
         const productsCollections = client.db('Glamour-support-products').collection('products')
         const servicesCollections = client.db('Glamour-support-products').collection('services')
+        const serviceReview = client.db('Glamour-support-products').collection('serviceReview')
+
+        //Products API
         app.get('/products', async (req, res) => {
             const query = {}
             const cursor = productsCollections.find(query)
@@ -28,6 +31,8 @@ async function run() {
             const products = await productsCollections.findOne(query)
             res.send(products)
         })
+
+        //Services API
         app.get('/services', async (req, res) => {
             const query = {}
             const cursor = servicesCollections.find(query)
@@ -39,6 +44,19 @@ async function run() {
             const query = { _id: ObjectId(id) }
             const products = await servicesCollections.findOne(query)
             res.send(products)
+        })
+
+        //Services Review API
+        app.post('/serviceReview', async (req, res) => {
+            const review = req.body;
+            const result = await serviceReview.insertOne(review)
+            res.send(result)
+        })
+        app.get('/serviceReview',async(req, res)=>{
+            const query = {}
+            const cursor = serviceReview.find(query)
+            const result = await cursor.toArray()
+            res.send(result)
         })
     }
     finally {
