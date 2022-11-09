@@ -14,23 +14,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try {
-        const productsCollections = client.db('Glamour-support-products').collection('products')
         const servicesCollections = client.db('Glamour-support-products').collection('services')
-        const serviceReview = client.db('Glamour-support-products').collection('serviceReview')
-
-        //Products API
-        app.get('/products', async (req, res) => {
-            const query = {}
-            const cursor = productsCollections.find(query)
-            const products = await cursor.toArray()
-            res.send(products)
-        })
-        app.get('/products/:id', async (req, res) => {
-            const id = req.params.id
-            const query = { _id: ObjectId(id) }
-            const products = await productsCollections.findOne(query)
-            res.send(products)
-        })
+        const serviceReviewCollections = client.db('Glamour-support-products').collection('serviceReview')
 
         //Services API
         app.get('/services', async (req, res) => {
@@ -49,14 +34,25 @@ async function run() {
         //Services Review API
         app.post('/serviceReview', async (req, res) => {
             const review = req.body;
-            const result = await serviceReview.insertOne(review)
+            const result = await serviceReviewCollections.insertOne(review)
             res.send(result)
         })
-        app.get('/serviceReview',async(req, res)=>{
-            const query = {}
-            const cursor = serviceReview.find(query)
+        app.get('/serviceReview', async (req, res) => {
+            let query = {}
+            if (req.query._id) {
+                query = {
+                    id: req.query._id
+                }
+            }
+            const cursor = serviceReviewCollections.find(query)
             const result = await cursor.toArray()
             res.send(result)
+        })
+        app.get('/serviceReview/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const serviceReview = await serviceReviewCollections.findOne(query)
+            res.send(serviceReview)
         })
     }
     finally {
