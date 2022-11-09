@@ -44,21 +44,22 @@ async function run() {
         })
         app.get('/serviceReview', async (req, res) => {
             let query = {}
-            if (req.query._id) {
+            if (req.query.email) {
                 query = {
-                    id: req.query._id
+                    email: req.query.email
                 }
             }
             const cursor = serviceReviewCollections.find(query)
             const result = await cursor.toArray()
             res.send(result)
         })
-        app.get('/serviceReview/:id', async (req, res) => {
-            const id = req.params.id
+        app.delete('/serviceReview/:id', async (req, res) => {
+            const id = req.params.id;
             const query = { _id: ObjectId(id) }
-            const serviceReview = await serviceReviewCollections.findOne(query)
-            res.send(serviceReview)
+            const result = await serviceReviewCollections.deleteOne(query)
+            res.send(result)
         })
+
     }
     finally {
 
