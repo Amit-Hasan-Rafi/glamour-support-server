@@ -19,45 +19,45 @@ async function run() {
 
         //Services API
         app.get('/services', async (req, res) => {
-            const query = {}
-            const cursor = servicesCollections.find(query)
-            const products = await cursor.toArray()
-            res.send(products)
+            const query = {};
+            const cursor = servicesCollections.find(query);
+            const products = await cursor.toArray();
+            res.send(products);
         })
         app.post('/services', async (req, res) => {
             const service = req.body;
-            const result = await servicesCollections.insertOne(service)
-            res.send(result)
+            const result = await servicesCollections.insertOne(service);
+            res.send(result);
         })
         app.get('/services/:id', async (req, res) => {
-            const id = req.params.id
-            const query = { _id: ObjectId(id) }
-            const products = await servicesCollections.findOne(query)
-            res.send(products)
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const products = await servicesCollections.findOne(query);
+            res.send(products);
         })
 
         //Services Review API
         app.post('/serviceReview', async (req, res) => {
             const review = req.body;
-            const result = await serviceReviewCollections.insertOne(review)
-            res.send(result)
+            const result = await serviceReviewCollections.insertOne(review);
+            res.send(result);
         })
         app.get('/serviceReview', async (req, res) => {
-            let query = {}
-            if (req.query.email) {
+            let query = {};
+            if (req.query.email) {;
                 query = {
                     email: req.query.email
                 }
             }
-            const cursor = serviceReviewCollections.find(query)
-            const result = await cursor.toArray()
-            res.send(result)
+            const cursor = serviceReviewCollections.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
         })
         app.delete('/serviceReview/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectId(id) }
-            const result = await serviceReviewCollections.deleteOne(query)
-            res.send(result)
+            const query = { _id: ObjectId(id) };
+            const result = await serviceReviewCollections.deleteOne(query);
+            res.send(result);
         })
 
     }
@@ -66,13 +66,13 @@ async function run() {
     }
 
 }
-run().catch(err => console.log(err))
+run().catch(err => console.log(err));
 
 
 app.get('/', (req, res) => {
-    res.send('NODE.js running')
+    res.send('Glamour Support Server Running');
 })
 
 app.listen(port, () => {
-    console.log(`port running ${port}`)
+    console.log(`port running ${port}`);
 })
